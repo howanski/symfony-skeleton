@@ -1,0 +1,32 @@
+name: ${APP_NAME:-symfony-starter-kit}
+services:
+  php:
+    entrypoint: /var/www/html/entrypoint-symfony.sh
+    env_file:
+      - .env
+    image: php:${PHP_VERSION:-8.2-fpm-bookworm}
+    logging:
+      driver: json-file
+      options:
+          max-size: "5m"
+          max-file: "2"
+    restart: always
+    volumes:
+      - ./app:/var/www/html
+      - ./bin-cache:/bin-cache
+  caddy:
+    depends_on:
+      - php
+    image: caddy:2
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: always
+    volumes:
+      - './caddy:/etc/caddy/'
+      - ./app:/var/www/html
