@@ -5,6 +5,8 @@ if [ ! -f "caddy/key.pem" ]; then
     openssl req -x509 -newkey rsa:4096 -keyout caddy/key.pem -out caddy/cert.pem -days 3650 -nodes
 fi
 
+mkdir -p postgres_data
+
 # touch caddy/caddy.log
 
 docker compose up

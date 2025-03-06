@@ -1,6 +1,8 @@
 name: ${APP_NAME:-symfony-starter-kit}
 services:
   php:
+    depends_on:
+      - db
     entrypoint: /var/www/html/entrypoint-symfony.sh
     env_file:
       - .env
@@ -30,3 +32,19 @@ services:
     volumes:
       - './caddy:/etc/caddy/'
       - ./app:/var/www/html
+  db:
+    env_file:
+      - .env
+    image: postgres:${POSTGRES_VERSION:-14}
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+    # ports:
+    #   - "5432:5432"
+    restart: always
+    user: "${UID}:${GID}"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+      - /etc/passwd:/etc/passwd:ro
