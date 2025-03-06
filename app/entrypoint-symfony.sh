@@ -33,4 +33,7 @@ fi
 
 chown -R $UID:$GID .
 
+echo "user = $UID" >> $PHP_FPM_CONF_FILE
+echo "group = $GID" >> $PHP_FPM_CONF_FILE
+
 php-fpm
