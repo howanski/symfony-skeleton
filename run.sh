@@ -6,6 +6,8 @@ if [ ! -f "caddy/key.pem" ]; then
 fi
 
 mkdir -p postgres_data
+mkdir -p ide_data/dot_config
+mkdir -p ide_data/dot_local
 
 # touch caddy/caddy.log
 

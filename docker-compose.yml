@@ -28,6 +28,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
+      - "444:444"
     restart: always
     volumes:
       - './caddy:/etc/caddy/'
@@ -58,3 +59,16 @@ services:
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
       - /etc/passwd:/etc/passwd:ro
+  ide:
+    image: codercom/code-server:latest
+    restart: always
+    user: "${UID}:${GID}"
+    volumes:
+      - ./ide_data/dot_local:/home/coder/.local
+      - ./ide_data/dot_config:/home/coder/.config
+      - ./app:/home/coder/project
+    logging:
+      driver: json-file
+      options:
+          max-size: "5m"
+          max-file: "2"

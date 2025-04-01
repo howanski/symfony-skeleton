@@ -23,3 +23,8 @@
     #     output file /etc/caddy/caddy.log
     # }
 }
+
+:444 {
+	tls /etc/caddy/cert.pem /etc/caddy/key.pem
+	reverse_proxy ide:8080
+}
