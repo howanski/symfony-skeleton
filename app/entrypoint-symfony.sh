@@ -1,7 +1,10 @@
 #!/bin/bash
 export PATH="/bin-cache:$PATH"
 apt update
-apt install -y unzip
+apt install -y unzip libpq-dev
+docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
+docker-php-ext-install pdo_mysql
+docker-php-ext-install pdo pdo_pgsql
 
 if [ ! -f "/bin-cache/composer.phar" ]; then
     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
@@ -31,9 +34,32 @@ if [ ! -d "vendor" ]; then
     composer.phar install
 fi
 
+php bin/console cache:clear
+
+chown -R $UID:$GID .
+
+# TODO: healthcheck on compose instead of manual polling?
+# MYSQL
+# until XDEBUG_MODE=off php bin/console dbal:run-sql -q "show tables"; do
+# 	echo "--------------------------------"
+# 	echo "------ [ WAITING FOR DB ] ------"
+# 	echo "--------------------------------"
+#     date
+# 	sleep 5
+# done
+
+php bin/console doctrine:migrations:migrate
+
+php bin/console assets:install public
+php bin/console importmap:install
+
 chown -R $UID:$GID .
 
 echo "user = $UID" >> $PHP_FPM_CONF_FILE
 echo "group = $GID" >> $PHP_FPM_CONF_FILE
+
+# TODO: apt install supervisor, move background tasks there
+# php bin/console messenger:consume async > /dev/null 2>&1 &
+# php bin/console messenger:consume -v another > /dev/null 2>&1 &
 
 php-fpm
