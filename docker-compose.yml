@@ -1,4 +1,4 @@
-name: ${APP_NAME:-symfony-starter-kit}
+name: ${APP_NAME}
 services:
   php:
     depends_on:
@@ -6,7 +6,7 @@ services:
     entrypoint: /var/www/html/entrypoint-symfony.sh
     env_file:
       - .env
-    image: php:${PHP_VERSION:-8.2-fpm-bookworm}
+    image: php:${PHP_VERSION}
     logging:
       driver: json-file
       options:
@@ -46,7 +46,7 @@ services:
       interval: 5m
       start_interval: 30s
       start_period: 5m
-    image: postgres:${POSTGRES_VERSION:-17}
+    image: postgres:${POSTGRES_VERSION}
     logging:
       driver: json-file
       options:
@@ -73,7 +73,7 @@ services:
   #         max-size: "5m"
   #         max-file: "2"
 #   db:
-#       image: mysql:9.2.0
+#       image: mysql:${MYSQL_VERSION}
 #       restart: always
 #       user: "${UID}:${GID}"
 #       ports:
