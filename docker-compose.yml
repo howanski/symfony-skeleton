@@ -12,7 +12,9 @@ services:
       options:
           max-size: "5m"
           max-file: "2"
-    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway" #XDEBUG CONNECTION
+    restart: no
     volumes:
       - ./app:/var/www/html
       - ./bin-cache:/bin-cache
@@ -29,7 +31,7 @@ services:
       - "80:80"
       - "443:443"
       - "444:444"
-    restart: always
+    restart: no
     volumes:
       - './caddy:/etc/caddy/'
       - ./app:/var/www/html
@@ -54,7 +56,7 @@ services:
         max-file: "2"
     # ports:
     #   - "5432:5432"
-    restart: always
+    restart: no
     user: "${UID}:${GID}"
     volumes:
       - ./postgres_data:/var/lib/postgresql/data

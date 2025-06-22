@@ -58,8 +58,22 @@ chown -R $UID:$GID .
 echo "user = $UID" >> $PHP_FPM_CONF_FILE
 echo "group = $GID" >> $PHP_FPM_CONF_FILE
 
+if [ $XDEBUG_ENABLE -eq 1 ]; then
+    pecl install xdebug
+    docker-php-ext-enable xdebug
+    echo "xdebug.mode=debug,coverage" >> $XDEBUG_INI_FILE
+    echo "xdebug.client_host=host.docker.internal" >> $XDEBUG_INI_FILE
+    echo "xdebug.start_with_request=yes" >> $XDEBUG_INI_FILE
+    echo "xdebug.discover_client_host=1" >> $XDEBUG_INI_FILE
+else
+    echo "Skipping Xdebug setup..."
+fi
+
 # TODO: apt install supervisor, move background tasks there
 # php bin/console messenger:consume async > /dev/null 2>&1 &
 # php bin/console messenger:consume -v another > /dev/null 2>&1 &
 
+echo "-----------------"
+echo "----- F P M -----"
+echo "-----------------"
 php-fpm
