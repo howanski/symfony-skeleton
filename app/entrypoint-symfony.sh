@@ -26,6 +26,7 @@ if [ ! -d "symfony" ]; then
     git config --global safe.directory '/var/www/html/symfony'
     symfony new symfony --version="$SYMFONY_VERSION" "$SYMFONY_VERSION_FLAGS"
     rm -rf symfony/.git
+    echo "DATABASE_URL=$DATABASE_URL" >> symfony/.env
 fi
 
 cd symfony
