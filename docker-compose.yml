@@ -57,14 +57,14 @@ services:
     # ports:
     #   - "5432:5432"
     restart: no
-    user: "${UID}:${GID}"
+    user: "${USER_ID}:${GROUP_ID}"
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
       - /etc/passwd:/etc/passwd:ro
   # ide:
   #   image: codercom/code-server:latest
   #   restart: always
-  #   user: "${UID}:${GID}"
+  #   user: "${USER_ID}:${GROUP_ID}"
   #   volumes:
   #     - ./ide_data/dot_local:/home/coder/.local
   #     - ./ide_data/dot_config:/home/coder/.config
@@ -77,7 +77,7 @@ services:
 #   db:
 #       image: mysql:${MYSQL_VERSION}
 #       restart: always
-#       user: "${UID}:${GID}"
+#       user: "${USER_ID}:${GROUP_ID}"
 #       ports:
 #         - "3306:3306"
 #       volumes:

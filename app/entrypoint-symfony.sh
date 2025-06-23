@@ -10,13 +10,13 @@ if [ ! -f "/bin-cache/composer.phar" ]; then
     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
     php composer-setup.php --install-dir=/bin-cache
     php -r "unlink('composer-setup.php');"
-    chown $UID:$GID /bin-cache/composer.phar
+    chown $USER_ID:$GROUP_ID /bin-cache/composer.phar
 fi
 
 if [ ! -f "/bin-cache/symfony" ]; then
     curl -sS https://get.symfony.com/cli/installer | bash
     mv "$HOME/.symfony5/bin/symfony" "/bin-cache"
-    chown $UID:$GID /bin-cache/symfony
+    chown $USER_ID:$GROUP_ID /bin-cache/symfony
 fi
 
 if [ ! -d "symfony" ]; then
@@ -37,7 +37,7 @@ fi
 
 php bin/console cache:clear
 
-chown -R $UID:$GID .
+chown -R $USER_ID:$GROUP_ID .
 
 # TODO: healthcheck on compose instead of manual polling?
 # MYSQL
@@ -54,10 +54,10 @@ php bin/console doctrine:migrations:migrate
 php bin/console assets:install public
 php bin/console importmap:install
 
-chown -R $UID:$GID .
+chown -R $USER_ID:$GROUP_ID .
 
-echo "user = $UID" >> $PHP_FPM_CONF_FILE
-echo "group = $GID" >> $PHP_FPM_CONF_FILE
+echo "user = $USER_ID" >> $PHP_FPM_CONF_FILE
+echo "group = $GROUP_ID" >> $PHP_FPM_CONF_FILE
 
 if [ $XDEBUG_ENABLE -eq 1 ]; then
     pecl install xdebug
